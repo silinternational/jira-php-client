@@ -1,32 +1,10 @@
 <?php return [
-    'baseUrl' => 'https://www.crashplan.com',
-    'apiVersion' => 'api',
+    'baseUrl' => 'https://jira63d.jaars.org/secure/rest/api',
+    'apiVersion' => '2',
     'operations' => [
-        'ListUsers' => [
-            'httpMethod' => 'GET',
-            'uri' => '/{ApiVersion}/User',
-            'responseModel' => 'User',
-            'parameters' => [
-                'ApiVersion' => [
-                    'required' => true,
-                    'type'     => 'string',
-                    'location' => 'uri',
-                ],
-                'email' => [
-                    'required' => false,
-                    'type' => 'string',
-                    'location' => 'query',
-                ],
-                'username' => [
-                    'required' => false,
-                    'type' => 'string',
-                    'location' => 'query',
-                ],
-            ]
-        ],
         'GetUser' => [
             'httpMethod' => 'GET',
-            'uri' => '/{ApiVersion}/User/{userId}',
+            'uri' => '/{ApiVersion}/user?username={username}',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -34,28 +12,16 @@
                     'type'     => 'string',
                     'location' => 'uri',
                 ],
-                'userId' => [
+                'username' => [
                     'required' => true,
                     'type' => 'string',
-                    'location' => 'uri',
-                ],
-            ]
-        ],
-        'GetCurrentUser' => [
-            'httpMethod' => 'GET',
-            'uri' => '/{ApiVersion}/User/my',
-            'responseModel' => 'User',
-            'parameters' => [
-                'ApiVersion' => [
-                    'required' => true,
-                    'type'     => 'string',
                     'location' => 'uri',
                 ],
             ]
         ],
         'AddUser' => [
             'httpMethod' => 'POST',
-            'uri' => '/{ApiVersion}/User',
+            'uri' => '/{ApiVersion}/user',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -63,28 +29,8 @@
                     'type'     => 'string',
                     'location' => 'uri',
                 ],
-                'orgId' => [
+                'name' => [
                     'required' => true,
-                    'type' => 'integer',
-                    'location' => 'json'
-                ],
-                'username' => [
-                    'required' => true,
-                    'type' => 'string',
-                    'location' => 'json'
-                ],
-                'email' => [
-                    'required' => false,
-                    'type' => 'string',
-                    'location' => 'json'
-                ],
-                'firstName' => [
-                    'required' => false,
-                    'type' => 'string',
-                    'location' => 'json'
-                ],
-                'lastName' => [
-                    'required' => false,
                     'type' => 'string',
                     'location' => 'json'
                 ],
@@ -93,16 +39,26 @@
                     'type' => 'string',
                     'location' => 'json'
                 ],
-                'emailPromo' => [
+                'emailAddress' => [
+                    'required' => false,
+                    'type' => 'string',
+                    'location' => 'json'
+                ],
+                'displayName' => [
+                    'required' => false,
+                    'type' => 'string',
+                    'location' => 'json'
+                ],
+                'active' => [
                     'required' => false,
                     'type' => 'boolean',
                     'location' => 'json'
-                ],
+                ]
             ]
         ],
         'UpdateUser' => [
             'httpMethod' => 'PUT',
-            'uri' => '/{ApiVersion}/User/{userId}',
+            'uri' => '/{ApiVersion}/user?username={username}',
             'responseModel' => 'Result',
             'parameters' => [
                 'ApiVersion' => [
@@ -110,56 +66,36 @@
                     'type'     => 'string',
                     'location' => 'uri',
                 ],
-                'userId' => [
-                    'required' => true,
-                    'type' => 'string',
-                    'location' => 'uri',
-                ],
-                'orgId' => [
-                    'required' => true,
-                    'type' => 'integer',
-                    'location' => 'json'
-                ],
                 'username' => [
                     'required' => true,
                     'type' => 'string',
-                    'location' => 'json'
-                ],
-                'email' => [
-                    'required' => false,
-                    'type' => 'string',
-                    'location' => 'json'
-                ],
-                'firstName' => [
-                    'required' => false,
-                    'type' => 'string',
-                    'location' => 'json'
-                ],
-                'lastName' => [
-                    'required' => false,
-                    'type' => 'string',
-                    'location' => 'json'
-                ],
+                    'location' => 'uri',
+                ]
                 'password' => [
                     'required' => false,
                     'type' => 'string',
                     'location' => 'json'
                 ],
-                'emailPromo' => [
+                'emailAddress' => [
                     'required' => false,
-                    'type' => 'boolean',
+                    'type' => 'string',
                     'location' => 'json'
                 ],
-                'quotaInBytes' => [
+                'displayName' => [
                     'required' => false,
-                    'type' => 'integer',
+                    'type' => 'string',
+                    'location' => 'json'
+                ],
+                'active' => [
+                    'required' => false,
+                    'type' => 'boolean',
                     'location' => 'json'
                 ]
             ]
         ],
         'DeactivateUser' => [
             'httpMethod' => 'PUT',
-            'uri' => '/{ApiVersion}/UserDeactivation/{userId}',
+            'uri' => '/{ApiVersion}/user?username={username}',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -167,21 +103,21 @@
                     'type'     => 'string',
                     'location' => 'uri',
                 ],
-                'userId' => [
+                'username' => [
                     'required' => true,
                     'type' => 'string',
                     'location' => 'uri',
                 ],
-                'blockUser' => [
-                    'required' => false,
+                'active' => [
+                    'required' => true,
                     'type' => 'boolean',
-                    'location' => 'json',
-                ],
+                    'location' => 'json'
+                ]
             ]
         ],
         'ActivateUser' => [
-            'httpMethod' => 'DELETE',
-            'uri' => '/{ApiVersion}/UserDeactivation/{userId}',
+            'httpMethod' => 'PUT',
+            'uri' => '/{ApiVersion}/user?username={username}',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -189,18 +125,35 @@
                     'type'     => 'string',
                     'location' => 'uri',
                 ],
-                'userId' => [
+                'username' => [
                     'required' => true,
                     'type' => 'string',
                     'location' => 'uri',
                 ],
-                'unblockUser' => [
-                    'required' => false,
+                'active' => [
+                    'required' => true,
                     'type' => 'boolean',
-                    'location' => 'json',
-                ],
+                    'location' => 'json'
+                ]
             ]
         ],
+        'DeleteUser' => [
+            'httpMethod' => 'DELETE',
+            'uri' => '/{ApiVersion}/user?username={username}',
+            'responseModel' => 'User',
+            'parameters' => [
+                'ApiVersion' => [
+                    'required' => true,
+                    'type'     => 'string',
+                    'location' => 'uri',
+                ],
+                'username' => [
+                    'required' => true,
+                    'type' => 'string',
+                    'location' => 'uri',
+                ],
+            ]
+        ]
     ],
     'models' => [
         'User' => [

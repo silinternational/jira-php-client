@@ -1,5 +1,5 @@
 <?php
-namespace Crashplan;
+namespace Jira;
 
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Command\Guzzle\GuzzleClient;
