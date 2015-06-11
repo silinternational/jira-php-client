@@ -7,13 +7,12 @@ use GuzzleHttp\Command\Guzzle\Description;
 use GuzzleHttp\Subscriber\Retry\RetrySubscriber;
 
 /**
- * Partial Crashplan API client implemented with Guzzle.
+ * Partial Jira API client implemented with Guzzle.
  *
- * @method array listUsers(array $config = [])
  * @method array getUser(array $config = [])
- * @method array getCurrentUser(array $config = [])
  * @method array addUser(array $config = [])
  * @method array updateUser(array $config = [])
+ * @method array deleteUser(array $config = [])
  * @method array deactivateUser(array $config = [])
  * @method array activateUser(array $config = [])
  */
@@ -27,10 +26,10 @@ class Client extends GuzzleClient
         // Apply some defaults.
         $config += [
             'max_retries'      => 3,
-            'description_path' => __DIR__ . '/crashplan-api.php',
+            'description_path' => __DIR__ . '/jira-api.php',
         ];
 
-        // Create the Crashplan client.
+        // Create the Jira client.
         parent::__construct(
             $this->getHttpClientFromConfig($config),
             $this->getDescriptionFromConfig($config),
@@ -106,7 +105,7 @@ class Client extends GuzzleClient
             );
         }
 
-        // Set credentials for authentication based on Crashplan's requirements.
+        // Set credentials for authentication based on Jira's requirements.
         $this->getHttpClient()->setDefaultOption('auth', [
             $config['apiuser'], $config['apipass']
         ]);
