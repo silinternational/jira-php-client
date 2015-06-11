@@ -129,10 +129,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertEquals("test_user2", $user['data']['name']);
+        $this->assertEquals("test_user", $user['key']);
     }
 
-    public function testDeactivateUser()
+    public function testDeleteUser()
     {
         $config = include 'config-test.php';
 
@@ -152,8 +152,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->deactivateUser(
             [
-                "userId" => 7225516194326404,
-                "blockUser" => false
+                "name" => "test_user",
             ]
         );
 

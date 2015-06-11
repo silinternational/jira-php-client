@@ -1,8 +1,8 @@
 {
-  "name": "silinternational/crashplan-php-client",
+  "name": "silinternational/jira-php-client",
   "type": "library",
-  "description": "PHP client library for interacting with CrashPlan API",
-  "keywords": ["crashplan","crash-plan"],
+  "description": "PHP client library for interacting with the Jira API",
+  "keywords": ["jira","atlassian", "JIRA"],
   "license": "MIT",
   "require": {
     "php": ">=5.4.0",
@@ -18,11 +18,15 @@
     {
       "name": "Phillip Shipley",
       "email": "phillip_shipley@sil.org"
+    },
+    {
+      "name": "Ben Duggan",
+      "email": "benaduggan@gmail.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Crashplan\\": "src/"
+      "Jira\\": "src/"
     }
   }
 }
