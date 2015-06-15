@@ -153,6 +153,23 @@
                     'location' => 'uri',
                 ],
             ]
+        ],
+        'SearchForUser' => [
+            'httpMethod' => 'GET',
+            'uri' => '/rest/api/{ApiVersion}/user/search?username={username}',
+            'responseModel' => 'User',
+            'parameters' => [
+                'ApiVersion' => [
+                    'required' => true,
+                    'type'     => 'string',
+                    'location' => 'uri',
+                ],
+                'username' => [
+                    'required' => true,
+                    'type' => 'string',
+                    'location' => 'uri',
+                ],
+            ]
         ]
     ],
     'models' => [

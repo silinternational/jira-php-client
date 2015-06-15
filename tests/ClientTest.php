@@ -159,4 +159,49 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(204, $user['statusCode']);
 
     }
+
+    public function testSearchForUserByEmail()
+    {
+        $config = include 'config-test.php';
+
+        $client = new Client($config);
+
+        $mockBody = Stream::factory(
+            json_encode(
+                [
+                    "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
+                    "avatarUrls"=> [
+                        "24x24" => "http://www.example.com/jira/secure/useravatar?size=small&ownerId=fred",
+                        "16x16" => "http://www.example.com/jira/secure/useravatar?size=xsmall&ownerId=fred",
+                        "32x32" => "http://www.example.com/jira/secure/useravatar?size=medium&ownerId=fred",
+                        "48x48" => "http://www.example.com/jira/secure/useravatar?size=large&ownerId=fred"
+                    ],
+                    "name" => "test_user",
+                    "key" => "test_user",
+                    "emailAddress" => "test_user@domain.org",
+                    "displayName"=> "Test User",
+                    "active" => true
+                ]
+            )
+        );
+
+
+        $mock = new Mock(
+            [
+                new Response(200, [], $mockBody),
+            ]
+        );
+
+        // Add the mock subscriber to the client.
+        $client->getHttpClient()->getEmitter()->attach($mock);
+
+        // Call get user and make sure we get back the user we expect from mock
+        $user = $client->searchForUser(
+            [
+                "username" => "test_user",
+            ]
+        );
+
+        $this->assertEquals("test_user", $user['key']);
+    }
 }
