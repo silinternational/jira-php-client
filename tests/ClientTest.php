@@ -84,7 +84,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 "emailAddress" => "test_user@domain.org",
                 "displayName" => "Test User",
                 "password" => "password123",
-                "active" => "true" // This isn't implemented in their api yet, but we're hopeful!
+                "active" => true // This isn't implemented in their api yet, but we're hopeful!
             ]
         );
 
@@ -122,10 +122,10 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->updateUser(
             [
-                "name" => "test_user",
+                "username" => "test_user",
                 "emailAddress" => "test_112345455433@domain.org",
                 "displayName" => "user display name",
-                "active" => "true"
+                "active" => true
             ]
         );
 
@@ -150,9 +150,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client->getHttpClient()->getEmitter()->attach($mock);
 
         // Call get user and make sure we get back the user we expect from mock
-        $user = $client->deactivateUser(
+        $user = $client->deleteUser(
             [
-                "name" => "test_user",
+                "username" => "test_user",
             ]
         );
 
