@@ -1,10 +1,10 @@
 <?php return [
-    'baseUrl' => 'https://jira63d.jaars.org/secure/rest/api',
+    'baseUrl' => 'https://dev.jira.insitehome.org',
     'apiVersion' => '2',
     'operations' => [
         'GetUser' => [
             'httpMethod' => 'GET',
-            'uri' => '/{ApiVersion}/user?username={username}',
+            'uri' => '/rest/api/{ApiVersion}/user?username={username}',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -21,7 +21,7 @@
         ],
         'AddUser' => [
             'httpMethod' => 'POST',
-            'uri' => '/{ApiVersion}/user',
+            'uri' => '/rest/api/{ApiVersion}/user',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -58,7 +58,7 @@
         ],
         'UpdateUser' => [
             'httpMethod' => 'PUT',
-            'uri' => '/{ApiVersion}/user?username={username}',
+            'uri' => '/rest/api/{ApiVersion}/user?username={username}',
             'responseModel' => 'Result',
             'parameters' => [
                 'ApiVersion' => [
@@ -95,7 +95,7 @@
         ],
         'DeactivateUser' => [
             'httpMethod' => 'PUT',
-            'uri' => '/{ApiVersion}/user?username={username}',
+            'uri' => '/rest/api/{ApiVersion}/user?username={username}',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -117,7 +117,7 @@
         ],
         'ActivateUser' => [
             'httpMethod' => 'PUT',
-            'uri' => '/{ApiVersion}/user?username={username}',
+            'uri' => '/rest/api/{ApiVersion}/user?username={username}',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
@@ -139,7 +139,7 @@
         ],
         'DeleteUser' => [
             'httpMethod' => 'DELETE',
-            'uri' => '/{ApiVersion}/user?username={username}',
+            'uri' => '/rest/api/{ApiVersion}/user?username={username}',
             'responseModel' => 'User',
             'parameters' => [
                 'ApiVersion' => [
