@@ -70,7 +70,7 @@
                     'required' => true,
                     'type' => 'string',
                     'location' => 'uri',
-                ]
+                ],
                 'password' => [
                     'required' => false,
                     'type' => 'string',
