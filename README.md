@@ -14,7 +14,7 @@ via parameters ```apiuser``` and ```apipass```.
 
 # Install #
 Installation is simple with [Composer](https://getcomposer.org/). 
-Add ```"silinternational/jira-php-client", "dev-master"``` to your ```composer.json``` file and update.
+Add ```"silinternational/jira-php-client": "dev-master"``` to your ```composer.json``` file and update.
 
 # Usage #
 Example:
