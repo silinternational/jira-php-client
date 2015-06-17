@@ -108,6 +108,11 @@
                     'type' => 'string',
                     'location' => 'uri',
                 ],
+                'emailAddress' => [
+                    'required' => true,
+                    'type' => 'string',
+                    'location' => 'uri',
+                ],
                 'active' => [
                     'required' => true,
                     'type' => 'boolean',
@@ -126,6 +131,11 @@
                     'location' => 'uri',
                 ],
                 'username' => [
+                    'required' => true,
+                    'type' => 'string',
+                    'location' => 'uri',
+                ],
+                'emailAddress' => [
                     'required' => true,
                     'type' => 'string',
                     'location' => 'uri',
