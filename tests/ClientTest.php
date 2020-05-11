@@ -31,7 +31,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $client = $this->getMockClient($mockBody, 200);
 
         // Call get user and make sure we get back the user we expect from mock
-        $user = $client->getUser(['username' => 'test_user', 'ApiVersion' => 'latest']);
+        $user = $client->getUser(['username' => 'test_user']);
 
         $this->assertEquals("test_user", $user['name']);
     }
@@ -50,7 +50,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->addUser([
-            'ApiVersion' => 'latest',
             "name" => "test_user",
             "emailAddress" => "test_user@domain.org",
             "displayName" => "Test User",
@@ -75,7 +74,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->updateUser([
-            'ApiVersion' => 'latest',
             "username" => "test_user",
             "emailAddress" => "test_112345455433@domain.org",
             "displayName" => "user display name",
@@ -93,7 +91,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->deleteUser([
-            'ApiVersion' => 'latest',
             "username" => "test_user",
         ]);
 
@@ -121,7 +118,6 @@ class ClientTest extends \PHPUnit_Framework_TestCase
 
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->searchForUser([
-            'ApiVersion' => 'latest',
             "username" => "test_user",
         ]);
 

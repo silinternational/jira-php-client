@@ -44,8 +44,10 @@ class Client extends GuzzleClient
 
         // Ensure that ApiVersion is set.
         $this->setConfig(
-            'defaults/ApiVersion',
-            $this->getDescription()->getApiVersion()
+            'defaults',
+            [
+                'ApiVersion' => $this->getDescription()->getApiVersion()
+            ]
         );
     }
 
