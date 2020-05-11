@@ -30,7 +30,7 @@ class Client extends GuzzleClient
         ];
 
         // Ensure that the credentials are set.
-        $this->applyCredentials($config);
+        $config = $this->applyCredentials($config);
 
         // Create the Jira client.
         parent::__construct(
