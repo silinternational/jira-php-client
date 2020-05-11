@@ -28,7 +28,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     "groups"=> [],
         ]);
 
-        $client = $this->getMockClient($mockBody, 200);
+        $client = $this->getMockClient($mockBody);
 
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->getUser(['username' => 'test_user']);
@@ -70,7 +70,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             "displayName"=> "Test User",
         ]);
 
-        $client = $this->getMockClient($mockBody, 200);
+        $client = $this->getMockClient($mockBody);
 
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->updateUser([
@@ -114,7 +114,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             "active" => true
         ]);
 
-        $client = $this->getMockClient($mockBody, 200);
+        $client = $this->getMockClient($mockBody);
 
         // Call get user and make sure we get back the user we expect from mock
         $user = $client->searchForUser([
@@ -124,11 +124,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("test_user", $user['key']);
     }
 
-    /**
-     * @param $mockBody
-     * @return Client
-     */
-    private function getMockClient($mockBody, $responseCode)
+    private function getMockClient(string $mockBody, int $responseCode = 200) : Client
     {
         $config = include 'config-test.php';
 
@@ -137,11 +133,11 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $handlerStack = HandlerStack::create($mockHandler);
-        $client = new Client(array_merge([
+
+        return new Client(array_merge([
             'http_client_options' => [
                 'handler' => $handlerStack,
             ]
         ], $config));
-        return $client;
     }
 }
