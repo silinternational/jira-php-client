@@ -4,7 +4,6 @@ namespace Jira;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Command\Guzzle\GuzzleClient;
 use GuzzleHttp\Command\Guzzle\Description;
-use GuzzleHttp\Subscriber\Retry\RetrySubscriber;
 
 /**
  * Partial Jira API client implemented with Guzzle.
@@ -12,6 +11,7 @@ use GuzzleHttp\Subscriber\Retry\RetrySubscriber;
  * @method array getUser(array $config = [])
  * @method array addUser(array $config = [])
  * @method array updateUser(array $config = [])
+ * @method array searchForUser(array $config = [])
  * @method array deleteUser(array $config = [])
  * @method array deactivateUser(array $config = [])
  * @method array activateUser(array $config = [])
@@ -25,24 +25,28 @@ class Client extends GuzzleClient
     {
         // Apply some defaults.
         $config += [
-            'max_retries'      => 3,
             'description_path' => __DIR__ . '/jira-api.php',
         ];
+
+        // Ensure that the credentials are set.
+        $config = $this->applyCredentials($config);
 
         // Create the Jira client.
         parent::__construct(
             $this->getHttpClientFromConfig($config),
             $this->getDescriptionFromConfig($config),
+            null,
+            null,
+            null,
             $config
         );
 
-        // Ensure that the credentials are set.
-        $this->applyCredentials($config);
-
         // Ensure that ApiVersion is set.
         $this->setConfig(
-            'defaults/ApiVersion',
-            $this->getDescription()->getApiVersion()
+            'defaults',
+            [
+                'ApiVersion' => $this->getDescription()->getApiVersion()
+            ]
         );
     }
 
@@ -58,15 +62,6 @@ class Client extends GuzzleClient
             ? $config['http_client_options']
             : [];
         $client = new HttpClient($clientOptions);
-
-        // Attach request retry logic.
-        $client->getEmitter()->attach(new RetrySubscriber([
-            'max' => $config['max_retries'],
-            'filter' => RetrySubscriber::createChainFilter([
-                RetrySubscriber::createStatusFilter(),
-                RetrySubscriber::createCurlFilter(),
-            ]),
-        ]));
 
         return $client;
     }
@@ -96,18 +91,20 @@ class Client extends GuzzleClient
         // Ensure that the credentials have been provided.
         if (!isset($config['apiuser'])) {
             throw new \InvalidArgumentException(
-                'You must provide a apiuser.'
+                'You must provide an apiuser.'
             );
         }
         if (!isset($config['apipass'])) {
             throw new \InvalidArgumentException(
-                'You must provide a apipass.'
+                'You must provide an apipass.'
             );
         }
 
-        // Set credentials for authentication based on Jira's requirements.
-        $this->getHttpClient()->setDefaultOption('auth', [
+        $config['auth'] = [
             $config['apiuser'], $config['apipass']
-        ]);
+        ];
+
+        // Return new config array with credentials for authentication based on Jira's requirements.
+        return $config;
     }
 }
