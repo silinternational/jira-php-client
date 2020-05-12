@@ -1,10 +1,10 @@
 <?php
 namespace tests;
 
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Response;
 use Jira\Client;
-use GuzzleHttp\Subscriber\Mock;
-use GuzzleHttp\Message\Response;
-use GuzzleHttp\Stream\Stream;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,11 +12,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     {
         $config = include 'config-test.php';
 
-        $client = new Client($config);
-
-        $mockBody = Stream::factory(
-            json_encode(
-                [
+        $mockBody = json_encode([
                     "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
                     "name" => "test_user",
                     "emailAddress" => "test_user@domain.org",
@@ -30,178 +26,118 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                     "active"=> true,
                     "timeZone"=> "Australia/Sydney",
                     "groups"=> [],
-                ]
-            )
-        );
+        ]);
 
-        $mock = new Mock(
-            [
-                new Response(200, [], $mockBody),
-            ]
-        );
-
-        // Add the mock subscriber to the client.
-        $client->getHttpClient()->getEmitter()->attach($mock);
+        $client = $this->getMockClient($mockBody);
 
         // Call get user and make sure we get back the user we expect from mock
-        $user = $client->getUser(['username' => "test_user"]);
+        $user = $client->getUser(['username' => 'test_user']);
 
         $this->assertEquals("test_user", $user['name']);
     }
 
     public function testAddUser()
     {
-        $config = include 'config-test.php';
+        $mockBody = json_encode([
+            "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
+            "name" => "test_user",
+            "key" => "test_user",
+            "emailAddress" => "test_user@domain.org",
+            "displayName"=> "Test User",
+        ]);
 
-        $client = new Client($config);
-
-
-        $mockBody = Stream::factory(
-            json_encode(
-                [
-                    "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
-                    "name" => "test_user",
-                    "key" => "test_user",
-                    "emailAddress" => "test_user@domain.org",
-                    "displayName"=> "Test User",
-                ]
-            )
-        );
-
-        $mock = new Mock(
-            [
-                new Response(201, [], $mockBody),
-            ]
-        );
-
-        // Add the mock subscriber to the client.
-        $client->getHttpClient()->getEmitter()->attach($mock);
+        $client = $this->getMockClient($mockBody, 201);
 
         // Call get user and make sure we get back the user we expect from mock
-        $user = $client->addUser(
-            [
-                "name" => "test_user",
-                "emailAddress" => "test_user@domain.org",
-                "displayName" => "Test User",
-                "password" => "password123",
-                "active" => true // This isn't implemented in their api yet, but we're hopeful!
-            ]
-        );
+        $user = $client->addUser([
+            "name" => "test_user",
+            "emailAddress" => "test_user@domain.org",
+            "displayName" => "Test User",
+            "password" => "password123",
+            "active" => true // This isn't implemented in their api yet, but we're hopeful!
+        ]);
 
         $this->assertEquals("test_user", $user['key']);
     }
 
-
     public function testUpdateUser()
     {
-        $config = include 'config-test.php';
+        $mockBody = json_encode([
+            "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
+            "name" => "test_user",
+            "key" => "test_user",
+            "emailAddress" => "test_user@domain.org",
+            "displayName"=> "Test User",
+        ]);
 
-        $client = new Client($config);
-
-        $mockBody = Stream::factory(
-            json_encode(
-                [
-                    "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
-                    "name" => "test_user",
-                    "key" => "test_user",
-                    "emailAddress" => "test_user@domain.org",
-                    "displayName"=> "Test User",
-                ]
-            )
-        );
-
-        $mock = new Mock(
-            [
-                new Response(200, [], $mockBody),
-            ]
-        );
-
-        // Add the mock subscriber to the client.
-        $client->getHttpClient()->getEmitter()->attach($mock);
+        $client = $this->getMockClient($mockBody);
 
         // Call get user and make sure we get back the user we expect from mock
-        $user = $client->updateUser(
-            [
-                "username" => "test_user",
-                "emailAddress" => "test_112345455433@domain.org",
-                "displayName" => "user display name",
-                "active" => true
-            ]
-        );
+        $user = $client->updateUser([
+            "username" => "test_user",
+            "emailAddress" => "test_112345455433@domain.org",
+            "displayName" => "user display name",
+            "active" => true
+        ]);
 
         $this->assertEquals("test_user", $user['key']);
     }
 
     public function testDeleteUser()
     {
-        $config = include 'config-test.php';
+        $mockBody = '{}';
 
-        $client = new Client($config);
-
-        $mockBody = Stream::factory('{}');
-
-        $mock = new Mock(
-            [
-                new Response(204, [], $mockBody),
-            ]
-        );
-
-        // Add the mock subscriber to the client.
-        $client->getHttpClient()->getEmitter()->attach($mock);
+        $client = $this->getMockClient($mockBody, 204);
 
         // Call get user and make sure we get back the user we expect from mock
-        $user = $client->deleteUser(
-            [
-                "username" => "test_user",
-            ]
-        );
+        $user = $client->deleteUser([
+            "username" => "test_user",
+        ]);
 
         $this->assertEquals(204, $user['statusCode']);
-
     }
 
     public function testSearchForUserByEmail()
     {
-        $config = include 'config-test.php';
+        $mockBody = json_encode([
+            "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
+            "avatarUrls"=> [
+                "24x24" => "http://www.example.com/jira/secure/useravatar?size=small&ownerId=fred",
+                "16x16" => "http://www.example.com/jira/secure/useravatar?size=xsmall&ownerId=fred",
+                "32x32" => "http://www.example.com/jira/secure/useravatar?size=medium&ownerId=fred",
+                "48x48" => "http://www.example.com/jira/secure/useravatar?size=large&ownerId=fred"
+            ],
+            "name" => "test_user",
+            "key" => "test_user",
+            "emailAddress" => "test_user@domain.org",
+            "displayName"=> "Test User",
+            "active" => true
+        ]);
 
-        $client = new Client($config);
-
-        $mockBody = Stream::factory(
-            json_encode(
-                [
-                    "self" => "http://www.example.com/jira/rest/api/2/user?username=test_user",
-                    "avatarUrls"=> [
-                        "24x24" => "http://www.example.com/jira/secure/useravatar?size=small&ownerId=fred",
-                        "16x16" => "http://www.example.com/jira/secure/useravatar?size=xsmall&ownerId=fred",
-                        "32x32" => "http://www.example.com/jira/secure/useravatar?size=medium&ownerId=fred",
-                        "48x48" => "http://www.example.com/jira/secure/useravatar?size=large&ownerId=fred"
-                    ],
-                    "name" => "test_user",
-                    "key" => "test_user",
-                    "emailAddress" => "test_user@domain.org",
-                    "displayName"=> "Test User",
-                    "active" => true
-                ]
-            )
-        );
-
-
-        $mock = new Mock(
-            [
-                new Response(200, [], $mockBody),
-            ]
-        );
-
-        // Add the mock subscriber to the client.
-        $client->getHttpClient()->getEmitter()->attach($mock);
+        $client = $this->getMockClient($mockBody);
 
         // Call get user and make sure we get back the user we expect from mock
-        $user = $client->searchForUser(
-            [
-                "username" => "test_user",
-            ]
-        );
+        $user = $client->searchForUser([
+            "username" => "test_user",
+        ]);
 
         $this->assertEquals("test_user", $user['key']);
+    }
+
+    private function getMockClient(string $mockBody, int $responseCode = 200) : Client
+    {
+        $config = include 'config-test.php';
+
+        $mockHandler = new MockHandler([
+            new Response($responseCode, [], $mockBody),
+        ]);
+
+        $handlerStack = HandlerStack::create($mockHandler);
+
+        return new Client(array_merge([
+            'http_client_options' => [
+                'handler' => $handlerStack,
+            ]
+        ], $config));
     }
 }
