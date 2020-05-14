@@ -140,4 +140,20 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ]
         ], $config));
     }
+
+    public function testAuthentication()
+    {
+        $this->markTestSkipped('to run this test, supply a baseUrl and auth params and remove this line');
+
+        $client = new Client([
+            'description_override' => [
+                'baseUrl' => 'https://jira.example.org',
+            ],
+            'apiuser' =>'username',
+            'apipass' =>'password',
+        ]);
+        $user = $client->searchForUser(['username'=>'john_doe']);
+
+        $this->assertContains('john_doe', $user[0]['key']);
+    }
 }
